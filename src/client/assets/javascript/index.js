@@ -11,7 +11,7 @@ const footiePlayers = [
   {
     name: "Messi",
     url:
-      "https://thumbor.forbes.com/thumbor/fit-in/416x416/filters%3Aformat%28jpg%29/https%3A%2F%2Fspecials-images.forbesimg.com%2Fimageserve%2F5ec595d45f39760007b05c07%2F0x0.jpg%3Fbackground%3D000000%26cropX1%3D989%26cropX2%3D2480%26cropY1%3D74%26cropY2%3D1564"
+      "https://e0.365dm.com/20/09/768x432/skysports-lionel-messi-barcelona_5113303.jpg?20200929233110"
   },
   {
     name: "Cristiano",
@@ -31,7 +31,7 @@ const footiePlayers = [
   {
     name: "Kante",
     url:
-      "https://resources.premierleague.com/premierleague/photos/players/250x250/p116594.png"
+      "https://icdn.psgtalk.com/wp-content/uploads/2021/03/ngolo-kante-wolverhampton-wanderers-v-chelsea-premier-league-2020.jpg"
   }
 ];
 
@@ -324,6 +324,7 @@ function resultsView(positions) {
 }
 
 function raceProgress(positions) {
+  positions.map((e, index) => (e.driver_name = footiePlayers[index].name));
   let userPlayer = positions.find(e => e.id === store.player_id);
   userPlayer.driver_name += " (you)";
 
@@ -403,8 +404,6 @@ async function getRacers() {
 }
 
 async function createRace(player_id, track_id) {
-  // player_id = parseInt(player_id);
-  // track_id = parseInt(track_id);
   try {
     const body = { player_id, track_id };
     const response = await fetch(`${SERVER}/api/races`, {
