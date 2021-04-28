@@ -7,6 +7,34 @@ var store = {
   race_id: undefined
 };
 
+const footiePlayers = [
+  {
+    name: "Messi",
+    url:
+      "https://thumbor.forbes.com/thumbor/fit-in/416x416/filters%3Aformat%28jpg%29/https%3A%2F%2Fspecials-images.forbesimg.com%2Fimageserve%2F5ec595d45f39760007b05c07%2F0x0.jpg%3Fbackground%3D000000%26cropX1%3D989%26cropX2%3D2480%26cropY1%3D74%26cropY2%3D1564"
+  },
+  {
+    name: "Cristiano",
+    url:
+      "https://e0.365dm.com/20/07/1600x900/skysports-cristiano-ronaldo_5050722.jpg?20200726215349"
+  },
+  {
+    name: "Dybala",
+    url:
+      "https://e0.365dm.com/20/01/1600x900/skysports-paulo-dybala-juventus_4901489.jpg?20200125084648"
+  },
+  {
+    name: "Mbape",
+    url:
+      "https://i.pinimg.com/736x/7b/f7/3e/7bf73eccb3fae3a2bb3db10c2986fe13.jpg"
+  },
+  {
+    name: "Kante",
+    url:
+      "https://resources.premierleague.com/premierleague/photos/players/250x250/p116594.png"
+  }
+];
+
 // We need our javascript to wait until the DOM is loaded
 document.addEventListener("DOMContentLoaded", function() {
   onPageLoad();
@@ -34,7 +62,6 @@ function setupClickHandlers() {
   document.addEventListener(
     "click",
     function(event) {
-      console.log(event);
       const { target } = event;
 
       // Race track form field
@@ -97,23 +124,6 @@ async function handleCreateRace() {
   } catch (e) {
     console.log(e);
   }
-
-  // The race has been created, now start the countdown
-  // runCountdown().then(
-  //   startRace(store.race_id)
-  //     .then
-  //     //runRace(store.race_id)
-  //     ()
-  // );
-
-  //   .then(data => console.log(data))
-  //   .catch(e => console.log(e));
-
-  // TODO - call the async function runCountdown
-
-  // TODO - call the async function startRace
-
-  // TODO - call the async function runRace
 }
 
 function runRace(raceID) {
@@ -121,13 +131,12 @@ function runRace(raceID) {
     const myInterval = setInterval(async () => {
       try {
         const res = await getRace(raceID);
-        console.log(res.positions);
         //const data = await response.json();
         if (res.status === "in-progress") {
           renderAt("#leaderBoard", raceProgress(res.positions));
           return;
         }
-        clearInterval(myInterval); // to stop the interval from repeating
+        clearInterval(myInterval); // clear the interval
         renderAt("#race", resultsView(res.positions)); // to render the results view
         resolve(res); // resolve the promise
       } catch (e) {
@@ -233,14 +242,15 @@ function renderRacerCars(racers) {
 }
 
 function renderRacerCard(racer) {
-  const { id, driver_name, top_speed, acceleration, handling } = racer;
+  const { id, driver_name, top_speed, acceleration, handling, url } = racer;
 
   return `
 		<li class="card podracer" id="${id}">
 			<h3> ${driver_name}</h3>
-			<p>${top_speed}</p>
-			<p>${acceleration}</p>
-			<p>${handling}</p>
+			<p>Top Speed: ${top_speed}</p>
+			<p> Acceleration: ${acceleration}</p>
+      <p>Handling: ${handling}</p>
+      <img src="${url}" width="200" height="300">
 		</li>
 	`;
 }
@@ -381,6 +391,10 @@ async function getRacers() {
     //http://localhost:8000/api/cars
     const response = await fetch(`${SERVER}/api/cars`);
     const data = await response.json();
+    data.map((e, index) => {
+      e.url = footiePlayers[index].url;
+      e.driver_name = footiePlayers[index].name;
+    });
     return data;
   } catch (error) {
     console.log(`Problem with getRacers request::`, error.message);
@@ -389,8 +403,8 @@ async function getRacers() {
 }
 
 async function createRace(player_id, track_id) {
-  player_id = parseInt(player_id);
-  track_id = parseInt(track_id);
+  // player_id = parseInt(player_id);
+  // track_id = parseInt(track_id);
   try {
     const body = { player_id, track_id };
     const response = await fetch(`${SERVER}/api/races`, {
