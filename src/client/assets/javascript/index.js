@@ -35,6 +35,50 @@ const footiePlayers = [
   }
 ];
 
+const stadiums = [
+  {
+    name: "Santiago Benabeu",
+    capacity: "81044",
+    Location: "Madrid",
+    url:
+      "https://www.spain.info/export/sites/segtur/.content/imagenes/cabeceras-grandes/madrid/estadio-bernabeu-vista-aerea-c-turismo-madrid.jpg_1014274486.jpg"
+  },
+  {
+    name: "Camp Nou",
+    capacity: "99354",
+    Location: "Barcelona",
+    url: "https://cdn.getyourguide.com/img/tour/5cd031d5654c4.jpeg/68.jpg"
+  },
+  {
+    name: "Le Parc des Princes",
+    capacity: "47929",
+    Location: "Paris",
+    url:
+      "https://en.parisinfo.com/var/otcp/sites/images/node_43/node_51/node_77884/node_79219/visite-du-parc-des-princes-experience-paris-saint-germain-vue-a%C3%A9rienne-%7C-630x405-%7C-%C2%A9-otcp-dr/16052576-1-fre-FR/Visite-du-Parc-des-Princes-Experience-Paris-Saint-Germain-Vue-a%C3%A9rienne-%7C-630x405-%7C-%C2%A9-OTCP-DR.jpg"
+  },
+  {
+    name: "Allianz Arena",
+    capacity: "75200",
+    Location: "Munich",
+    url:
+      "https://www.fifaultimateteam.it/en/wp-content/uploads/2019/07/allianz-2.jpg"
+  },
+  {
+    name: "Emirates Stadium",
+    capacity: "60260",
+    Location: "London",
+    url:
+      "https://www.arsenal.com/sites/default/files/styles/desktop_16x9/public/images/gun__1357737628_emirates_stadium2.jpg?itok=Bl47Prbp"
+  },
+  {
+    name: "Stamford Bridge",
+    capacity: "41837",
+    Location: "London",
+    url:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Stamford_Bridge_Clear_Skies.JPG/1200px-Stamford_Bridge_Clear_Skies.JPG"
+  }
+];
+
 // We need our javascript to wait until the DOM is loaded
 document.addEventListener("DOMContentLoaded", function() {
   onPageLoad();
@@ -106,11 +150,8 @@ async function delay(ms) {
 // This async function controls the flow of the race, add the logic and error handling
 async function handleCreateRace() {
   // render starting UI
-
-  // TODO - Get player_id and track_id from the store
   const { player_id, track_id } = store;
 
-  // const race = TODO - invoke the API call to create the race, then save the result
   try {
     const race = await createRace(player_id, track_id);
     //const data = await race.json();
@@ -143,20 +184,6 @@ function runRace(raceID) {
         console.log(e);
       }
     }, 500);
-    // TODO - use Javascript's built in setInterval method to get race info every 500ms
-    /* 
-    
-		TODO - if the race info status property is "in-progress", update the leaderboard by calling:
-
-		renderAt('#leaderBoard', raceProgress(res.positions))
-	*/
-    /* 
-		TODO - if the race info status property is "finished", run the following:
-
-		clearInterval(raceInterval) // to stop the interval from repeating
-		renderAt('#race', resultsView(res.positions)) // to render the results view
-		reslove(res) // resolve the promise
-	*/
   });
   // remember to add error handling for the Promise
 }
@@ -168,7 +195,6 @@ async function runCountdown() {
     let timer = 3;
 
     return new Promise(resolve => {
-      // TODO - use Javascript's built in setInterval method to count down once per second
       const myInterval = setInterval(() => {
         document.getElementById("big-numbers").innerHTML = --timer;
         if (timer === 0) {
@@ -196,7 +222,6 @@ function handleSelectPodRacer(target) {
   // add class selected to current target
   target.classList.add("selected");
 
-  // TODO - save the selected racer to the store
   store.player_id = parseInt(target.id);
 }
 
@@ -212,13 +237,10 @@ function handleSelectTrack(target) {
   // add class selected to current target
   target.classList.add("selected");
   store.track_id = parseInt(target.id);
-
-  // TODO - save the selected track id to the store
 }
 
 function handleAccelerate() {
-  console.log("accelerate button clicked");
-  // TODO - Invoke the API call to accelerate
+  //console.log("accelerate button clicked");
   accelerate(store.race_id).then(() => console.log("accelerated"));
 }
 
@@ -272,11 +294,14 @@ function renderTrackCards(tracks) {
 }
 
 function renderTrackCard(track) {
-  const { id, name } = track;
+  const { id, name, capacity, location, url } = track;
 
   return `
 		<li id="${id}" class="card track">
-			<h3>${name}</h3>
+      <h3>${name}</h3>
+      <h3>Capacity: ${capacity}</h3>
+      <h3>Location: ${location}</h3>
+      <img src="${url}" width="200" height="300">
 		</li>
 	`;
 }
@@ -380,6 +405,14 @@ async function getTracks() {
     //http://localhost:8000/api/cars
     const response = await fetch(`${SERVER}/api/tracks`);
     const data = await response.json();
+    data.map((e, index) => {
+      //console.log(e);
+      e.name = stadiums[index].name;
+      e.capacity = stadiums[index].capacity;
+      e.location = stadiums[index].Location;
+      e.url = stadiums[index].url;
+    });
+    //console.log(data);
     return data; // return the data to use it later
   } catch (error) {
     console.log(`Problem with getRacers request::`, error.message);
