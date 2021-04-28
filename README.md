@@ -2,9 +2,7 @@
 
 ## Project Introduction
 
-Here is a partially built-out game that races cars—your job is to complete it! Throughout the game logic, you will find _"TODO"_ comments that must be completed in order for the game to work. You are going to use the asynchronous skills you gained in the course to fill in the blanks in this game.
-
-The game mechanics are this: you select a player and track, the game begins and you accelerate your racer by clicking an acceleration button. As you accelerate so do the other players and the leaderboard live-updates as players change position on the track. The final view is a results page displaying the players' rankings.
+This project is the third one of the nano Intermediate Javascript Nanodegree Program https://www.udacity.com/course/intermediate-javascript-nanodegree--nd032. The goal of this project is to demonstrate the understanding of asynchronous javascript through the usage of promises and async/await syntax. The starter code provides an API that has to be consumed by the front-end. I've made the application my own by customising it with footbal theme. Once you select a player and a stadium you need to click the accelerate button as fast as you can to get to the top of the leadership board.
 
 The game has three main views:
 
@@ -41,13 +39,14 @@ To run the server, locate your operating system and run the associated command i
 Note that this process will use your terminal tab, so you will have to open a new tab and navigate back to the project root to start the front end.
 
 #### WINDOWS USERS -- Setting Environment Variables
+
 If you are using a windows machine:
-1. `cd` into the root of the project containing data.json 
+
+1. `cd` into the root of the project containing data.json
 2. Run the following command to add the environment variable:
-```set DATA_FILE=./data.json```
+   `set DATA_FILE=./data.json`
 
 If you still run into issues running the API server on your machine, you can run this project in the Udacity classroom.
-
 
 ### Start the Frontend
 
@@ -105,4 +104,5 @@ Accelerate a car
 - Returns nothing
 
 To complete the race logic, find all the TODO tags in index.js and read the instructions.
+
 # udacity-racer
